@@ -19,17 +19,18 @@ let main =
     [
       package "multipart_form";
       package "uri";
-      package "tar-mirage";
       package "magic-mime";
       package "fat-filesystem";
       package "mirage-block-partition";
       package "http";
       package "tyxml";
       package "cohttp-mirage";
-      package "multipart_form-lwt";
+      package "mirage-kv";
+      package "csv";
+      package "yojson";
     ]
   in
   let keys = List.map key [ http_port ] in
-  foreign ~packages ~keys "Unikernel.Main" (block @-> http @-> kv_ro @-> job)
+  foreign ~packages ~keys "Unikernel.Main" (block @-> http @-> kv_ro @-> pclock @-> job)
 
-let () = register "timeless" [ main $ img $ http_srv $ data ]
+let () = register "timeless" [ main $ img $ http_srv $ data $ default_posix_clock ]
